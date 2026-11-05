@@ -1,9 +1,18 @@
-# Face Generator
+# Gerador de caras
 
-React application to generate random faces.
+Página standalone para gerar caras pixeladas e salvar o resultado em SVG.
 
-![Faces](/assets/faces.gif)
+![Caras](/assets/faces.gif)
 
-## How to Run
+## Como usar
 
-Simply `npm start`.
+Abra `index.html` diretamente no navegador. Não é necessário instalar nada nem
+rodar um servidor.
+
+Os arquivos da página são:
+
+- `index.html` — estrutura da página
+- `style.css` — estilos
+- `script.js` — lógica dos controles e exportação
+- `pixel-face.js` — cópia local da biblioteca
+  [pixel-face](https://github.com/CGReinhold/pixel-face), usada para desenhar as caras

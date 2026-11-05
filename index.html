@@ -1,15 +1,193 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Face generator" />
-    <title>Face Generator</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <script type="module" src="/src/index.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(18, 18, 18)" />
+  <meta name="description" content="Gerador de caras pixeladas com exportação em SVG." />
+  <title>Gerador de caras</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <h1 class="header__title">Gerador de caras</h1>
+      <p class="header__subtitle">Monte uma cara pixelada e salve o resultado em SVG.</p>
+    </header>
+
+    <section class="preview" aria-label="Prévia da cara gerada">
+      <div id="face-preview" class="preview__face"></div>
+    </section>
+
+    <div class="actions">
+      <button id="random" class="button button--primary" type="button">Aleatório!</button>
+      <button id="save" class="button" type="button">Salvar!</button>
+    </div>
+
+    <div class="controls">
+      <section class="controls__group" aria-labelledby="face-heading">
+        <h2 class="controls__title" id="face-heading">Rosto</h2>
+
+        <div class="field">
+          <span class="field__label" id="face-color-label">Cor do rosto</span>
+          <div class="swatches" role="radiogroup" aria-labelledby="face-color-label" data-color-group="faceColor">
+            <label class="swatch" title="Preto">
+              <input type="radio" name="face-color" value="#000000" />
+              <span class="swatch__box" style="--swatch: #000000" aria-hidden="true"></span>
+              <span class="visually-hidden">Preto</span>
+            </label>
+            <label class="swatch" title="Marrom escuro">
+              <input type="radio" name="face-color" value="#5c3836" />
+              <span class="swatch__box" style="--swatch: #5c3836" aria-hidden="true"></span>
+              <span class="visually-hidden">Marrom escuro</span>
+            </label>
+            <label class="swatch" title="Marrom">
+              <input type="radio" name="face-color" value="#704139" />
+              <span class="swatch__box" style="--swatch: #704139" aria-hidden="true"></span>
+              <span class="visually-hidden">Marrom</span>
+            </label>
+            <label class="swatch" title="Marrom claro">
+              <input type="radio" name="face-color" value="#ad6452" />
+              <span class="swatch__box" style="--swatch: #ad6452" aria-hidden="true"></span>
+              <span class="visually-hidden">Marrom claro</span>
+            </label>
+            <label class="swatch" title="Salmão">
+              <input type="radio" name="face-color" value="#ffe0bd" />
+              <span class="swatch__box" style="--swatch: #ffe0bd" aria-hidden="true"></span>
+              <span class="visually-hidden">Salmão</span>
+            </label>
+            <label class="swatch" title="Amarelo">
+              <input type="radio" name="face-color" value="#e3cc88" />
+              <span class="swatch__box" style="--swatch: #e3cc88" aria-hidden="true"></span>
+              <span class="visually-hidden">Amarelo</span>
+            </label>
+            <label class="swatch" title="Branco">
+              <input type="radio" name="face-color" value="#fff5e1" />
+              <span class="swatch__box" style="--swatch: #fff5e1" aria-hidden="true"></span>
+              <span class="visually-hidden">Branco</span>
+            </label>
+            <label class="swatch" title="Vermelho">
+              <input type="radio" name="face-color" value="#a01900" />
+              <span class="swatch__box" style="--swatch: #a01900" aria-hidden="true"></span>
+              <span class="visually-hidden">Vermelho</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="face-width">Largura do rosto</label>
+          <input id="face-width" type="number" min="5" max="15" step="1" inputmode="numeric" data-field="width" />
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="face-height">Altura do rosto</label>
+          <input id="face-height" type="number" min="5" max="15" step="1" inputmode="numeric" data-field="height" />
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="face-pointiness">Finura do rosto</label>
+          <input id="face-pointiness" type="number" min="0" max="30" step="1" inputmode="numeric" data-field="pointiness" />
+        </div>
+      </section>
+
+      <section class="controls__group" aria-labelledby="hair-heading">
+        <h2 class="controls__title" id="hair-heading">Cabelo</h2>
+
+        <div class="field">
+          <label class="field__label" for="hair-color">Cor do cabelo</label>
+          <input id="hair-color" type="color" value="#ffffff" />
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="hair-length">Comprimento do cabelo</label>
+          <input id="hair-length" type="number" min="0" max="15" step="1" inputmode="numeric" data-field="hairLength" />
+        </div>
+
+        <div class="field">
+          <span class="field__label" id="hair-type-label">Tipo do cabelo</span>
+          <label class="switch">
+            <input id="hair-type" type="checkbox" role="switch" aria-labelledby="hair-type-label" />
+            <span class="switch__side switch__side--down" aria-hidden="true">Pra baixo!</span>
+            <span class="switch__track" aria-hidden="true">
+              <span class="switch__thumb"></span>
+            </span>
+            <span class="switch__side switch__side--up" aria-hidden="true">Pra cima!</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="controls__group" aria-labelledby="eyes-heading">
+        <h2 class="controls__title" id="eyes-heading">Olhos</h2>
+
+        <div class="field">
+          <span class="field__label" id="eye-color-label">Cor dos olhos</span>
+          <div class="swatches" role="radiogroup" aria-labelledby="eye-color-label" data-color-group="eyeColor">
+            <label class="swatch" title="Preto">
+              <input type="radio" name="eye-color" value="#000000" />
+              <span class="swatch__box" style="--swatch: #000000" aria-hidden="true"></span>
+              <span class="visually-hidden">Preto</span>
+            </label>
+            <label class="swatch" title="Marrom escuro">
+              <input type="radio" name="eye-color" value="#5c3836" />
+              <span class="swatch__box" style="--swatch: #5c3836" aria-hidden="true"></span>
+              <span class="visually-hidden">Marrom escuro</span>
+            </label>
+            <label class="swatch" title="Marrom claro">
+              <input type="radio" name="eye-color" value="#ad6452" />
+              <span class="swatch__box" style="--swatch: #ad6452" aria-hidden="true"></span>
+              <span class="visually-hidden">Marrom claro</span>
+            </label>
+            <label class="swatch" title="Verde">
+              <input type="radio" name="eye-color" value="#00aa00" />
+              <span class="swatch__box" style="--swatch: #00aa00" aria-hidden="true"></span>
+              <span class="visually-hidden">Verde</span>
+            </label>
+            <label class="swatch" title="Azul">
+              <input type="radio" name="eye-color" value="#0000aa" />
+              <span class="swatch__box" style="--swatch: #0000aa" aria-hidden="true"></span>
+              <span class="visually-hidden">Azul</span>
+            </label>
+            <label class="swatch" title="Cinza">
+              <input type="radio" name="eye-color" value="#aaaaaa" />
+              <span class="swatch__box" style="--swatch: #aaaaaa" aria-hidden="true"></span>
+              <span class="visually-hidden">Cinza</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="eyes-horizontal">Margem horizontal dos olhos</label>
+          <input id="eyes-horizontal" type="number" min="-1" max="2" step="1" inputmode="numeric" data-field="eyeHorizontalMargin" />
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="eyes-vertical">Margem vertical dos olhos</label>
+          <input id="eyes-vertical" type="number" min="-2" max="2" step="1" inputmode="numeric" data-field="eyeVerticalMargin" />
+        </div>
+      </section>
+
+      <section class="controls__group" aria-labelledby="nose-mouth-heading">
+        <h2 class="controls__title" id="nose-mouth-heading">Nariz e boca</h2>
+
+        <div class="field">
+          <label class="field__label" for="nose-width">Largura do nariz</label>
+          <input id="nose-width" type="number" min="0" max="4" step="1" inputmode="numeric" data-field="noseWidth" />
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="nose-height">Altura do nariz</label>
+          <input id="nose-height" type="number" min="0" max="4" step="1" inputmode="numeric" data-field="noseHeight" />
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="mouth-length">Largura da boca</label>
+          <input id="mouth-length" type="number" min="1" max="5" step="1" inputmode="numeric" data-field="mouthWidth" />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="./pixel-face.js" defer></script>
+  <script src="./script.js" defer></script>
+</body>
 </html>
