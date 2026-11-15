@@ -75,7 +75,7 @@ input {
 
 .chip.back-button { padding: 0; border: 0; background: transparent; min-height: 0; }
 .chip.back-button:hover { background: transparent; }
-.chip.back-button img { display: block; height: 32px; width: auto; image-rendering: pixelated; }
+.chip.back-button img { display: block; /* 9x6 sprite at 5x */ height: 30px; width: auto; image-rendering: pixelated; }
 
 .chip:hover {
   background: rgba(255, 255, 255, 0.1);
